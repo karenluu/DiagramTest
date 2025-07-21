@@ -1,0 +1,55 @@
+@startuml
+
+' Define core entities
+class Program {
+    +programId : String
+}
+
+class Plan {
+    +planId : String
+}
+
+class SSA {
+    +stateCode : String
+}
+
+class SSAEffectivePeriod {
+    +periodId : String
+    +startDate : Date
+    +endDate : Date
+}
+
+class Dealer {
+    +dealerNumber : String
+    +stateCode : String
+}
+
+class DSA {
+    +dealerNumber : String
+}
+
+class DSAEffectivePeriod {
+    +periodId : String
+    +startDate : Date
+    +endDate : Date
+}
+
+' Relationships
+Program "1" -- "0..*" Plan : has >
+Plan "1" -- "1" Program : belongs to >
+
+SSA "1" -- "0..*" SSAEffectivePeriod : has >
+SSAEffPeriod "1" -- "1" SSA : belongs to >
+
+SSAEffPeriod "1" -- "0..*" Plan : includes >
+Plan "0..*" -- "0..*" SSAEffPeriod : available in >
+
+Dealer "1" -- "1" SSA : does business in >
+
+Dealer "1" -- "1" DSA : identified by >
+DSA "1" -- "0..*" DSAEffectivePeriod : has >
+
+DSAEffPeriod "1" -- "0..*" Plan : includes subset of >
+DSAEffPeriod "1" -- "1" SSAEffPeriod : associated via Dealer's state >
+
+@enduml
